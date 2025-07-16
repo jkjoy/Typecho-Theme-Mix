@@ -6,8 +6,6 @@ function themeConfig($form) {
     $form->addInput($logoUrl);
     $icoUrl = new Typecho_Widget_Helper_Form_Element_Text('icoUrl', NULL, NULL, _t('站点 Favicon 地址'));
     $form->addInput($icoUrl);
-    $sticky = new Typecho_Widget_Helper_Form_Element_Text('sticky', NULL, NULL, _t('置顶文章cid'), _t('多篇文章以`|`符号隔开'), _t('会在首页展示置顶文章。'));
-    $form->addInput($sticky);
     $headerbg = new Typecho_Widget_Helper_Form_Element_Text('headerbg', NULL, NULL, _t('header背景'), _t('填写背景图片url'), _t('header背景图片'));
     $form->addInput($headerbg);
     $defaultcover = new Typecho_Widget_Helper_Form_Element_Text('defaultcover', NULL, NULL, _t('默认封面'), _t('填写背景图片url'), _t('文章封面默认图片'));
@@ -22,89 +20,17 @@ function themeConfig($form) {
     $form->addInput($twitterurl);
     $mastodonurl = new Typecho_Widget_Helper_Form_Element_Text('mastodonurl', NULL, NULL, _t('mastodon'), _t('会在个人信息显示'));
     $form->addInput($mastodonurl);
-    $friendlyTime = new Typecho_Widget_Helper_Form_Element_Radio('friendlyTime', 
-        array('0' => _t('否'),
-              '1' => _t('是')),
-        '0', _t('是否显示友好时间'), _t('默认不显示友好时间，显示标准时间格式'));
-    $form->addInput($friendlyTime);
-    $cnavatar = new Typecho_Widget_Helper_Form_Element_Text('cnavatar', NULL, NULL , _t('Gravatar镜像'), _t('默认https://cravatar.cn/avatar/'));
-    $form->addInput($cnavatar);
-    $addhead = new Typecho_Widget_Helper_Form_Element_Textarea('addhead', NULL, NULL, _t('Head内代码用于网站验证等'), _t('支持HTML'));
+    $addhead = new Typecho_Widget_Helper_Form_Element_Textarea('addhead', NULL, NULL, _t('Head内代码用于网站验证等'), _t('支持HTML语法，代码会添加到网站的head标签内'));
     $form->addInput($addhead);
-    $tongji = new Typecho_Widget_Helper_Form_Element_Textarea('tongji', NULL, NULL, _t('统计代码'), _t('支持HTML'));
+    $tongji = new Typecho_Widget_Helper_Form_Element_Textarea('tongji', NULL, NULL, _t('统计代码或者备案信息'), _t('支持HTML语法'));
     $form->addInput($tongji);
-}
-
-function saveThemeConfig($config) {
-    // 可以在这里添加额外的验证或处理逻辑
-    return $config;
 }
 
 // 自定义字段
 function themeFields($layout) {
-    $summary= new Typecho_Widget_Helper_Form_Element_Textarea('summary', NULL, NULL, _t('文章摘要'), _t('自定义摘要'));
-    $layout->addItem($summary);
     $cover= new Typecho_Widget_Helper_Form_Element_Text('cover', NULL, NULL, _t('文章封面'), _t('自定义文章封面'));
     $layout->addItem($cover);
 }
-
-/*
-* 文章浏览数统计
-*/
-function get_post_view($archive) {
-    $cid = $archive->cid;
-    $db = Typecho_Db::get();
-    $prefix = $db->getPrefix();
-    if (!array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
-        $db->query('ALTER TABLE `' . $prefix . 'contents` ADD `views` INT(10) DEFAULT 0;');
-        echo 0;
-        return;
-    }
-    $row = $db->fetchRow($db->select('views')->from('table.contents')->where('cid = ?', $cid));
-    if ($archive->is('single')) {
-        $views = Typecho_Cookie::get('extend_contents_views');
-        if (empty($views)) {
-            $views = array();
-        } else {
-            $views = explode(',', $views);
-        }
-        if (!in_array($cid, $views)) {
-            $db->query($db->update('table.contents')->rows(array('views' => (int)$row['views'] + 1))->where('cid = ?', $cid));
-            array_push($views, $cid);
-            $views = implode(',', $views);
-            Typecho_Cookie::set('extend_contents_views', $views); //记录查看cookie
-            
-        }
-    }
-    echo $row['views'];
-}
-
-/** 头像镜像     */
-$options = Typecho_Widget::widget('Widget_Options');
-$gravatarPrefix = empty($options->cnavatar) ? 'https://cravatar.cn/avatar/' : $options->cnavatar;
-define('__TYPECHO_GRAVATAR_PREFIX__', $gravatarPrefix);
-
-/**
-* 页面加载时间
-*/
-function timer_start() {
-    global $timestart;
-    $mtime = explode( ' ', microtime() );
-    $timestart = $mtime[1] + $mtime[0];
-    return true;
-    }
-    timer_start();
-    function timer_stop( $display = 0, $precision = 3 ) {
-    global $timestart, $timeend;
-    $mtime = explode( ' ', microtime() );
-    $timeend = $mtime[1] + $mtime[0];
-    $timetotal = number_format( $timeend - $timestart, $precision );
-    $r = $timetotal < 1 ? $timetotal * 1000 . " ms" : $timetotal . " s";
-    if ( $display ) {
-    echo $r;
-    }
-    return $r;
-    }
 
 /**
 * 获取文章第一张图片
@@ -412,30 +338,3 @@ class AttachmentHelper {
     }
 }
 ?>
-<?php 
-/**
- * 友好时间显示函数
- * @param int $time 时间戳
- * @param int $threshold 阈值（秒），超过此值则显示标准日期格式（Y-m-d）
- * @return string
- */
-function time_ago($time, $threshold = 31536000) { // 31536000秒 = 1年
-    $now = time();
-    $difference = $now - $time;
-    
-    // 如果时间差超过阈值（默认1年），则返回标准日期格式（不带时间）
-    if ($difference >= $threshold) {
-        return date('Y-m-d', $time);
-    }
-    
-    // 1年以内的时间，返回友好格式（如 "3天前"）
-    $periods = array("秒", "分钟", "小时", "天", "周", "个月", "年");
-    $lengths = array("60", "60", "24", "7", "4.35", "12");
-    
-    for ($j = 0; $difference >= $lengths[$j] && $j < count($lengths); $j++) {
-        $difference /= $lengths[$j];
-    }
-    
-    $difference = round($difference);
-    return $difference . $periods[$j] . "前";
-}

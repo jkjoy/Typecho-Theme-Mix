@@ -1,5 +1,5 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<a href="/feed" target="_blank" aria-label="RSS订阅" class="btn btn-default btn-lg page-scroll wow fadeInUp">
+<a href="<?php $this->options->siteUrl('feed'); ?>" target="_blank" aria-label="RSS订阅" class="btn btn-default btn-lg page-scroll wow fadeInUp">
 <i class="fa fa-rss"></i></a>
 <?php if($this->options->telegramurl): ?>
 <a href="<?php $this->options->telegramurl() ?>" target="_blank" aria-label="电报" class="btn btn-default btn-lg page-scroll wow fadeInUp">

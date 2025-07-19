@@ -6,9 +6,9 @@ function themeConfig($form) {
     $form->addInput($logoUrl);
     $icoUrl = new Typecho_Widget_Helper_Form_Element_Text('icoUrl', NULL, NULL, _t('站点 Favicon 地址'));
     $form->addInput($icoUrl);
-    $headerbg = new Typecho_Widget_Helper_Form_Element_Text('headerbg', NULL, NULL, _t('header背景'), _t('填写背景图片url'), _t('header背景图片'));
+    $headerbg = new Typecho_Widget_Helper_Form_Element_Text('headerbg', NULL, NULL, _t('头图背景'), _t('填写图片url'), _t('头图背景图片'));
     $form->addInput($headerbg);
-    $defaultcover = new Typecho_Widget_Helper_Form_Element_Text('defaultcover', NULL, NULL, _t('默认封面'), _t('填写背景图片url'), _t('文章封面默认图片'));
+    $defaultcover = new Typecho_Widget_Helper_Form_Element_Text('defaultcover', NULL, NULL, _t('默认封面'), _t('填写图片url'), _t('文章封面默认图片'));
     $form->addInput($defaultcover);
     $instagramurl = new Typecho_Widget_Helper_Form_Element_Text('instagramurl', NULL, NULL, _t('Instagram'), _t('会在个人信息显示'));
     $form->addInput($instagramurl);
@@ -16,19 +16,19 @@ function themeConfig($form) {
     $form->addInput($telegramurl);
     $githuburl = new Typecho_Widget_Helper_Form_Element_Text('githuburl', NULL, 'https://github.com/', _t('github'), _t('会在个人信息显示'));
     $form->addInput($githuburl);
-    $twitterurl = new Typecho_Widget_Helper_Form_Element_Text('twitterurl', NULL, NULL, _t('twitter'), _t('会在个人信息显示'));
+    $twitterurl = new Typecho_Widget_Helper_Form_Element_Text('twitterurl', NULL, 'https://x.com/', _t('twitter'), _t('会在个人信息显示'));
     $form->addInput($twitterurl);
     $mastodonurl = new Typecho_Widget_Helper_Form_Element_Text('mastodonurl', NULL, NULL, _t('mastodon'), _t('会在个人信息显示'));
     $form->addInput($mastodonurl);
-    $addhead = new Typecho_Widget_Helper_Form_Element_Textarea('addhead', NULL, NULL, _t('Head内代码用于网站验证等'), _t('支持HTML语法，代码会添加到网站的head标签内'));
+    $addhead = new Typecho_Widget_Helper_Form_Element_Textarea('addhead', NULL, NULL, _t('支持HTML'), _t('支持HTML语法，代码会添加到网站的head标签内'));
     $form->addInput($addhead);
-    $tongji = new Typecho_Widget_Helper_Form_Element_Textarea('tongji', NULL, NULL, _t('统计代码或者备案信息'), _t('支持HTML语法'));
+    $tongji = new Typecho_Widget_Helper_Form_Element_Textarea('tongji', NULL, NULL, _t('支持HTML'), _t('支持HTML语法,统计代码或者备案信息'));
     $form->addInput($tongji);
 }
 
 // 自定义字段
 function themeFields($layout) {
-    $cover= new Typecho_Widget_Helper_Form_Element_Text('cover', NULL, NULL, _t('文章封面'), _t('自定义文章封面'));
+    $cover= new Typecho_Widget_Helper_Form_Element_Text('cover', NULL, NULL, _t('文章封面地址'), _t('自定义文章封面'));
     $layout->addItem($cover);
 }
 

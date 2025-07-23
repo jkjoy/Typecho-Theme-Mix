@@ -35,6 +35,7 @@
 
     <?php endif; ?>
     <?php $this->options->addhead() ?>
+    <style>:root {--primary-color: <?php $this->options->primarycolor(); ?>;--secondary-color: <?php $this->options->secondarycolor(); ?>;--text-color: <?php $this->options->textcolor(); ?>;--background-color: <?php $this->options->bgcolor(); ?>;--type-color: <?php $this->options->typecolor(); ?>;--box-color: <?php $this->options->boxcolor(); ?>;}</style>
     <?php //$this->header(); ?>
 </head>
 <body>

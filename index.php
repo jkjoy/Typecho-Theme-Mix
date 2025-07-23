@@ -3,7 +3,7 @@
  * 缝合怪主题
  * @package 缝合怪
  * @author  老孙 
- * @version 0.0.1
+ * @version 1.0.0
  * @link https://www.imsun.org
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
@@ -14,14 +14,12 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 		<section id="" class="box-content box-style text-center">
 			<div class="container">
 				<div class="row heading wow fadeInDown">
-          <!--
 					<div class="col-lg-12">
-						<h2><strong>展示列表</strong></h2>
+						<h2><strong><?php $this->options->customtitle(); ?></strong></h2>
 					  <hr>
 					  <div class="clearfix"></div>
-					  <p>全部文章</p>
+					  <p><?php $this->options->customdescription(); ?></p>
 					</div>
-          -->
 				</div>
 				<div class="categories">
 				  <ul class="cat">
@@ -37,7 +35,6 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 				  </ul>
 				  <div class="clearfix"></div>
 				</div>
-				
 				<div class="row">
 				  <div class="portfolio-items">
 <?php $delay = 200;  
